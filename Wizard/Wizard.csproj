@@ -9,5 +9,9 @@
       <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0009" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Assets" />
+    </ItemGroup>
+
 
 </Project>
