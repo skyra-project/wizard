@@ -34,6 +34,13 @@ jobs:
 
     # - name: Perform CodeQL Analysis
     #   uses: github/codeql-action/analyze@v1
+  Build:  
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - run: dotnet build <my project>
 
   Resharper:
     name: Resharper
