@@ -37,6 +37,20 @@ jobs:
         dotnet-version: '3.1.x'
     - name: Build .NET
       run: dotnet build
+      
+  Test:
+    name: Test
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Run Unit Tests
+      run: dotnet test
 
   Resharper:
     name: Resharper
