@@ -1,3 +1,6 @@
 .idea/
 Wizard/obj/
-Wizard/bin
+Wizard/bin/
+
+Wizard.Tests/obj/
+Wizard.Tests/bin/
