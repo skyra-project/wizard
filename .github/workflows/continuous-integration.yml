@@ -24,13 +24,19 @@ jobs:
     - run: git checkout HEAD^2
       if: ${{ github.event_name == 'pull_request' }}
       
-  Build:  
+  Build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-dotnet@v1
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-    - run: dotnet build <my project>
+    - name: Build .NET
+      run: dotnet build <my project>
 
   Resharper:
     name: Resharper
