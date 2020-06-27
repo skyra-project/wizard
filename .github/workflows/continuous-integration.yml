@@ -36,7 +36,7 @@ jobs:
       with:
         dotnet-version: '3.1.x'
     - name: Build .NET
-      run: dotnet build <my project>
+      run: dotnet build
 
   Resharper:
     name: Resharper
