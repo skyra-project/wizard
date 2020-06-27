@@ -23,17 +23,7 @@ jobs:
     # the head of the pull request instead of the merge commit.
     - run: git checkout HEAD^2
       if: ${{ github.event_name == 'pull_request' }}
-    #  TODO: Re-enable the following lines after adding some code to analyze
-    # - name: Initialize CodeQL
-    #   uses: github/codeql-action/init@v1
-
-    # # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # # If this step fails, then you should remove it and run the build manually (see below)
-    # - name: Autobuild
-    #   uses: github/codeql-action/autobuild@v1
-
-    # - name: Perform CodeQL Analysis
-    #   uses: github/codeql-action/analyze@v1
+      
   Build:  
     steps:
     - uses: actions/checkout@master
