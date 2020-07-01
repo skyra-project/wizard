@@ -1,0 +1,24 @@
+{
+  "projectName": "wizard",
+  "projectOwner": "skyra-project",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Tylertron1998",
+      "name": "Tyler Davis",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/34944514?v=4",
+      "profile": "https://github.com/Tylertron1998",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
