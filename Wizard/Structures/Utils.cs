@@ -5,7 +5,7 @@ namespace Wizard.Structures
 	public static class Utils
 	{
 		/// <summary>
-		/// Converts from degrees to radians.
+		///     Converts from degrees to radians.
 		/// </summary>
 		/// <param name="degrees"> An angle in degrees.</param>
 		/// <returns>An angle in radians.</returns>

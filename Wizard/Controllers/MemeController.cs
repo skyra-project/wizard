@@ -1,17 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Net.Http;
-using System.Security.Policy;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Wizard.Abstractions;
-using Wizard.Structures;
 using FileSystem = System.IO.File;
 
 namespace Wizard.Controllers
@@ -21,9 +17,6 @@ namespace Wizard.Controllers
 	public class MemeController : ControllerBase
 	{
 		private readonly Size _batmanCropSize = new Size(79 * 2);
-		private readonly Size _robinCropSize = new Size(93 * 2);
-		private readonly PngEncoder _encoder = new PngEncoder();
-		private readonly MediaTypeHeaderValue _header = MediaTypeHeaderValue.Parse("image/png");
 
 		/*
 		 warning: this might break. If so, move this down to where the images are overlaid, and change
@@ -31,6 +24,9 @@ namespace Wizard.Controllers
 		 */
 
 		private readonly Point _batmanLocation = new Point(476, 173) - new Size(191 / 2);
+		private readonly PngEncoder _encoder = new PngEncoder();
+		private readonly MediaTypeHeaderValue _header = MediaTypeHeaderValue.Parse("image/png");
+		private readonly Size _robinCropSize = new Size(93 * 2);
 		private readonly Point _robinLocation = new Point(244, 265) - new Size(246 / 2);
 
 		[HttpGet("slap")]
