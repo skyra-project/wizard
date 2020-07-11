@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -19,64 +20,60 @@ namespace Wizard.Controllers
 	[Route("[controller]")]
 	public class MemeController : ControllerBase
 	{
-		[HttpPost("batslap")]
-		public async Task<IActionResult> SlapAsync(
-			[FromBody] SlapData data)
+		private readonly Size _batmanCropSize = new Size(79 * 2);
+		private readonly Size _robinCropSize = new Size(93 * 2);
+		private readonly PngEncoder _encoder = new PngEncoder();
+		private readonly MediaTypeHeaderValue _header = MediaTypeHeaderValue.Parse("image/png");
+
+		/*
+		 warning: this might break. If so, move this down to where the images are overlaid, and change
+		 new Size(191 / 2); to new Size(batman.Width / 2); for BOTH batman and robin.
+		 */
+
+		private readonly Point _batmanLocation = new Point(476, 173) - new Size(191 / 2);
+		private readonly Point _robinLocation = new Point(244, 265) - new Size(246 / 2);
+
+		[HttpGet("slap")]
+		public async Task<IActionResult> SlapAsync([FromQuery] Uri firstUrl, [FromQuery] Uri secondUrl)
 		{
 			using var client = new HttpClient();
 
-			try
+			var first = await client.GetByteArrayAsync(firstUrl);
+
+			var second = await client.GetByteArrayAsync(secondUrl);
+
+			using var baseImage = await Image.LoadAsync(FileSystem.OpenRead("Assets/images/memes/slap.png"));
+
+			using var batman = Image.Load(first);
+			using var robin = Image.Load(second);
+
+			// crop & mutate them both
+			batman.Mutate(context =>
 			{
-				var first = await client.GetByteArrayAsync(data.FirstUserUrl);
-
-				var second = await client.GetByteArrayAsync(data.SecondUserUrl);
-
-				using var baseImage = await Image.LoadAsync(FileSystem.OpenRead("Assets/images/memes/slap.png"));
-
-				using var batman = Image.Load(first);
-				using var robin = Image.Load(second);
-
-				// crop & mutate them both
-				batman.Mutate(x =>
-				{
-					x.ConvertToAvatar(new Size(79 * 2), 79);
-					x.Rotate(-13.96f);
-					x.Flip(FlipMode.Horizontal);
-				});
-				robin.Mutate(x =>
-				{
-					x.ConvertToAvatar(new Size(93 * 2), 93);
-					x.Rotate(-24.53f);
-				});
-
-				baseImage.Mutate(x =>
-				{
-					var batmanLocation = new Point(476, 173) - new Size(batman.Width / 2, batman.Height / 2);
-					var robinLocation = new Point(244, 265) - new Size(robin.Width / 2, robin.Height / 2);
-
-					x.DrawImage(batman, batmanLocation, 1f);
-					x.DrawImage(robin, robinLocation, 1f);
-				});
-
-				var stream = new MemoryStream();
-
-				await baseImage.SaveAsync(stream, new PngEncoder());
-
-				stream.Seek(0, SeekOrigin.Begin);
-
-				return new FileStreamResult(stream, MediaTypeHeaderValue.Parse("image/png"));
-
-			}
-			catch (HttpRequestException exception)
+				context.ConvertToAvatar(_batmanCropSize, 79);
+				context.Rotate(-13.96f);
+				context.Flip(FlipMode.Horizontal);
+			});
+			robin.Mutate(context =>
 			{
-				return BadRequest(exception);
-			}
-		}
+				context.ConvertToAvatar(_robinCropSize, 93);
+				context.Rotate(-24.53f);
+			});
 
-		public struct SlapData
-		{
-			public string FirstUserUrl { get; set; }
-			public string SecondUserUrl { get; set; }
+			// draw avatars on the base image.
+			baseImage.Mutate(context =>
+			{
+				context.DrawImage(batman, _batmanLocation, 1f);
+				context.DrawImage(robin, _robinLocation, 1f);
+			});
+
+			var stream = new MemoryStream();
+
+			await baseImage.SaveAsync(stream, _encoder);
+
+			stream.Seek(0, SeekOrigin.Begin);
+
+			return new FileStreamResult(stream, _header);
 		}
 	}
 }
