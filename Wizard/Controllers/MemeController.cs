@@ -19,14 +19,16 @@ namespace Wizard.Controllers
 	[Route("[controller]")]
 	public class MemeController : ControllerBase
 	{
-		[HttpGet("batslap")]
-		public async Task<IActionResult> SlapAsync([FromBody] SlapData data)
+		[HttpPost("batslap")]
+		public async Task<IActionResult> SlapAsync(
+			[FromBody] SlapData data)
 		{
 			using var client = new HttpClient();
 
 			try
 			{
 				var first = await client.GetByteArrayAsync(data.FirstUserUrl);
+
 				var second = await client.GetByteArrayAsync(data.SecondUserUrl);
 
 				using var baseImage = await Image.LoadAsync(FileSystem.OpenRead("Assets/images/memes/slap.png"));
@@ -58,7 +60,7 @@ namespace Wizard.Controllers
 
 				var stream = new MemoryStream();
 
-				baseImage.Save(stream, new PngEncoder());
+				await baseImage.SaveAsync(stream, new PngEncoder());
 
 				stream.Seek(0, SeekOrigin.Begin);
 
