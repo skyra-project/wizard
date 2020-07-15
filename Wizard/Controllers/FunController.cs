@@ -48,10 +48,10 @@ namespace Wizard.Controllers
 			wheel.Mutate(context =>
 			{
 				context.Rotate(-rotationAmount);
-				var (width, height) = context.GetCurrentSize();
-				var middleX = width / 2;
-				var middleY = height / 2;
-				context.Crop(new Rectangle(middleX - 205, middleY - 205, 410, 410));
+				// var (width, height) = context.GetCurrentSize();
+				// var middleX = width / 2;
+				// var middleY = height / 2;
+				// context.Crop(new Rectangle(middleX - 205, middleY - 205, 410, 410));
 			});
 
 			var segments = new LinearLineSegment(
@@ -61,7 +61,8 @@ namespace Wizard.Controllers
 
 			image.Mutate(context =>
 			{
-				context.DrawImage(wheel, new Point(250 - 205, 250 - 205), 1f);
+				context.DrawImage(wheel, new Point(250 - (wheel.Width / 2), 250 - (wheel.Height / 2)), 1f);
+				context.Draw(new SolidBrush(Color.Brown), 2f, new EllipsePolygon(250f, 250f, 5f));
 				context.Draw(new SolidBrush(Color.Yellow), 2f, new Polygon(segments));
 			});
 
