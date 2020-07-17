@@ -14,7 +14,7 @@ namespace Wizard.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	public class MemeController : ControllerBase
+	public class MemeController : ImageControllerBase
 	{
 		private readonly Size _batmanCropSize = new Size(79 * 2);
 
@@ -24,8 +24,6 @@ namespace Wizard.Controllers
 		 */
 
 		private readonly Point _batmanLocation = new Point(476, 173) - new Size(191 / 2);
-		private readonly PngEncoder _encoder = new PngEncoder();
-		private readonly MediaTypeHeaderValue _header = MediaTypeHeaderValue.Parse("image/png");
 		private readonly Size _robinCropSize = new Size(93 * 2);
 		private readonly Point _robinLocation = new Point(244, 265) - new Size(246 / 2);
 
@@ -65,11 +63,11 @@ namespace Wizard.Controllers
 
 			var stream = new MemoryStream();
 
-			await baseImage.SaveAsync(stream, _encoder);
+			await baseImage.SaveAsync(stream, Encoder);
 
 			stream.Seek(0, SeekOrigin.Begin);
 
-			return new FileStreamResult(stream, _header);
+			return new FileStreamResult(stream, Header);
 		}
 	}
 }

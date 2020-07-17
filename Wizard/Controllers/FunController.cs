@@ -16,64 +16,53 @@ namespace Wizard.Controllers
 {
 	[ApiController]
 	[Route("fun")]
-	public class FunController : ControllerBase
+	public class FunController : ImageControllerBase
 	{
-
-		//TODO: make ImageControllerBase class, that has these fields.
-		private readonly PngEncoder _encoder = new PngEncoder();
-		private readonly MediaTypeHeaderValue _header = MediaTypeHeaderValue.Parse("image/png");
-
 		private readonly Dictionary<float, int> _winningRotations = new Dictionary<float, int>
 		{
-			{2.4f, 0},
-			{0.3f, 1},
-			{1.5f, 2},
-			{1.2f, 3},
-			{0.5f, 4},
+			{0.1f, 0},
+			{2.4f, 1},
+			{0.3f, 2},
+			{1.5f, 3},
+			{1.2f, 4},
 			{1.7f, 5},
-			{0.2f, 6},
-			{0.1f, 7}
+			{0.5f, 6},
+			{0.2f, 7}
 		};
+
+		private readonly Polygon _trianglePolygon = new Polygon(new LinearLineSegment(
+			new PointF(250, 50),
+			new PointF(240, 35),
+			new PointF(260, 35)));
+
 		[HttpGet("wof")]
 		public async Task<IActionResult> GetWofAsync([FromQuery] float winningAmount)
 		{
-			using var image = new Image<Rgb24>(500, 800);
-			using var wheel = await Image.LoadAsync(FileSystem.OpenRead("./Assets/images/fun/wheel.png"));
+			using var image = new Image<Rgb24>(800, 500);
+			using var wheel = await Image.LoadAsync(FileSystem.OpenRead("./Assets/images/fun/wof.bmp"));
 
 			var random = new Random();
 			var rnd = random.NextDouble();
 
-			var rotationAmount = (44f * _winningRotations[winningAmount]) + (float)(44f * rnd) + 0.5f;
+			var offset = (45f * _winningRotations[winningAmount]);
 
-			wheel.Mutate(context =>
-			{
-				context.Rotate(-rotationAmount);
-				// var (width, height) = context.GetCurrentSize();
-				// var middleX = width / 2;
-				// var middleY = height / 2;
-				// context.Crop(new Rectangle(middleX - 205, middleY - 205, 410, 410));
-			});
 
-			var segments = new LinearLineSegment(
-				new PointF(250, 250 - 155),
-				new PointF(240, 250 - 165),
-			new PointF(260, 250 - 165));
+			var rotationAmount = offset + (43f * (float)rnd) + 1f;
+			wheel.Mutate(context => { context.Rotate(-rotationAmount); });
 
 			image.Mutate(context =>
 			{
 				context.DrawImage(wheel, new Point(250 - (wheel.Width / 2), 250 - (wheel.Height / 2)), 1f);
-				context.Draw(new SolidBrush(Color.Brown), 2f, new EllipsePolygon(250f, 250f, 5f));
-				context.Draw(new SolidBrush(Color.Yellow), 2f, new Polygon(segments));
+				context.Fill(Color.Gold, _trianglePolygon);
 			});
 
 			var stream = new MemoryStream();
 
-			await image.SaveAsync(stream, _encoder);
+			await image.SaveAsync(stream, Encoder);
 
 			stream.Seek(0, SeekOrigin.Begin);
 
-			return new FileStreamResult(stream, _header);
-
+			return new FileStreamResult(stream, Header);
 		}
 	}
 }
