@@ -61,8 +61,8 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [support server]:                    https://join.skyra.pw
 [patreon]:                           https://www.patreon.com/kyranet
 
-[patreonimage]:                      https://raw.githubusercontent.com/skyra-project/Skyra/master/assets/github/patreon.png
-[paypalimage]:                       https://raw.githubusercontent.com/skyra-project/Skyra/master/assets/github/paypal.png
-[bitcoinimage]:                      https://raw.githubusercontent.com/skyra-project/Skyra/master/assets/github/bitcoin.png
-[ethereumimage]:                     https://raw.githubusercontent.com/skyra-project/Skyra/master/assets/github/ethereum.png
-[litecoinimage]:                     https://raw.githubusercontent.com/skyra-project/Skyra/master/assets/github/litecoin.png
+[patreonimage]:                      https://cdn.skyra.pw/gh-assets/patreon.png
+[paypalimage]:                       https://cdn.skyra.pw/gh-assets/paypal.png
+[bitcoinimage]:                      https://cdn.skyra.pw/gh-assets/bitcoin.png
+[ethereumimage]:                     https://cdn.skyra.pw/gh-assets/ethereum.png
+[litecoinimage]:                     https://cdn.skyra.pw/gh-assets/litecoin.png
