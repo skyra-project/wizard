@@ -41,9 +41,9 @@ namespace Wizard.Controllers
 		};
 
 		private readonly Polygon _trianglePolygon = new Polygon(new LinearLineSegment(
-			new PointF(250, 50),
-			new PointF(240, 35),
-			new PointF(260, 35)));
+			new PointF(125, 25),
+			new PointF(120, 35 / 2),
+			new PointF(130, 35 / 2)));
 
 		private readonly Color _triangleColour = Color.ParseHex("#FFCC33");
 
@@ -53,16 +53,16 @@ namespace Wizard.Controllers
 		private readonly Random _random = new Random();
 		private readonly Font _topFont;
 		private readonly Font _bottomFont;
-		private readonly PointF _topLocation = new PointF(600, 200);
-		private readonly PointF _bottomLocation = new PointF(600, 300);
+		private readonly PointF _topLocation = new PointF(300, 100);
+		private readonly PointF _bottomLocation = new PointF(300, 150);
 		private readonly Image _background = Image.Load(FileSystem.OpenRead("./Assets/images/fun/wof_background.bmp"));
 		private readonly Image _wheel = Image.Load(FileSystem.OpenRead("./Assets/images/fun/wof.bmp"));
 		private readonly Image _shiny = Image.Load(FileSystem.OpenRead("./Assets/images/social/shiny_small.png"));
 
 		public FunController()
 		{
-			_topFont = _textFont.CreateFont(46f);
-			_bottomFont = _textFont.CreateFont(32f);
+			_topFont = _textFont.CreateFont(23f);
+			_bottomFont = _textFont.CreateFont(16f);
 		}
 
 		[HttpGet("wof")]
@@ -81,15 +81,18 @@ namespace Wizard.Controllers
 
 			var updatedBalance = bet * winningAmount;
 
-			var measure = TextMeasurer.MeasureBounds($"New Balance: {updatedBalance}", new RendererOptions(_textFont.CreateFont(32f)));
+			var measure = TextMeasurer.MeasureBounds($"New Balance: {updatedBalance}", new RendererOptions(_textFont.CreateFont(16f)));
 
 			_background.Mutate(context =>
 			{
-				context.DrawImage(_wheel, new Point(250 - (_wheel.Width / 2), 250 - (_wheel.Height / 2)), 1f);
+				context.DrawImage(_wheel, new Point(125 - (_wheel.Width / 2), 125 - (_wheel.Height / 2)), 1f);
 				context.Fill(_triangleColour, _trianglePolygon);
 				context.DrawText(_options, $"You {text}", _topFont, Color.White, _topLocation);
 				context.DrawText(_options, $"New Balance: {updatedBalance}", _bottomFont, Color.LightGray, _bottomLocation);
-				context.DrawImage(_shiny, new Point(610 + (int)measure.Width / 2, 300 - 14), 1f);
+
+				var shinyPoint = new Point(305 + (int) measure.Width / 2, 150 - 7);
+
+				context.DrawImage(_shiny, shinyPoint, 1f);
 			});
 
 
