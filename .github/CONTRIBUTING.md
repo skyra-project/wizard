@@ -5,7 +5,7 @@
 To contribute to this repository, feel free to create a new fork of the repository and
 submit a pull request.
 
-1. Fork, clone, and select the **master** branch.
+1. Fork, clone, and select the **main** branch.
 2. Create a new branch in your fork.
 3. Make your changes.
 4. Commit your changes, and push them.
